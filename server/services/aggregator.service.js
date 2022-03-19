@@ -1,5 +1,6 @@
 // aggregrate logic
 
+const { addLog } = require("../../helper");
 const { isValidTransaction } = require("./server.service");
 
 const messagesFromClients = [];
@@ -20,7 +21,7 @@ const getInvalidMessages = () => {
 const getAllMessages = () => messagesFromClients;
 const aggregateMessage = async (tx) => {
 	aggregatedValue += tx.value;
-	console.log("aggregatedValue: ", aggregatedValue);
+	addLog("aggregatedValue: " + aggregatedValue);
 	const isValid = await isValidTransaction(tx);
 	messagesFromClients.push({
 		address: tx.address,
@@ -29,8 +30,10 @@ const aggregateMessage = async (tx) => {
 	});
 	if (!isValid) {
 		aggregatedValue -= tx.value;
-		console.log("invalid transaction");
-		console.log("aggregatedValue: ", aggregatedValue);
+		addLog(
+			`Transaction failed to report, removing \x1b[31m${tx.value}\x1b[0m from aggregated Value`
+		);
+		addLog("aggregatedValue: " + aggregatedValue);
 	}
 };
 

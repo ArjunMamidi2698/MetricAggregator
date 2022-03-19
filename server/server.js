@@ -33,8 +33,6 @@ app.post("/sendMessage", (req, res) => {
 	// handleJSONResponse(res, JSON.parse(CircularJSON.stringify(getWeb3Instance())));
 });
 
-const web3 = getWeb3Instance();
-web3.eth.getAccounts(console.log);
 
 // Server listening
 server.listen(port, () => {

@@ -6,7 +6,9 @@ const cors = require("cors");
 const {
 	getWeb3Instance,
 	postTransactionToServer,
+	initClientToServerMessagesPolling,
 } = require("./client.service");
+const { addLog } = require("../helper");
 const server = require("http").createServer(app);
 
 require("dotenv").config({ path: "../.env" }); // read properties from .env
@@ -22,17 +24,12 @@ app.use((req, res, next) => {
 	next();
 });
 
-getWeb3Instance().eth.getAccounts(async (err, accounts) => {
-	const interval = setInterval(() => {
-		postTransactionToServer(
-			accounts[Math.floor(Math.random() * accounts.length)],
-			Math.floor(Math.random() * 10) + 1
-		); // AJ - TODO - LIMIT FROM ENV
-	}, 1000);
-	setTimeout(() => {
-		clearInterval(interval);
-	}, 30000);
-});
+// // send a message to server
+// app.post("/postMessage", async (req, res) => {
+	
+// });
+
+initClientToServerMessagesPolling();
 
 // Server listening
 server.listen(port, () => {
