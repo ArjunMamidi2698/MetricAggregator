@@ -4,7 +4,10 @@
   "description": "Servive to aggregate periodically received metrics and to expose api's to fetch data",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "ganache": "ganache --wallet.seed myCustomSeed",
+    "server": "cd server && node server.js",
+    "client": "cd client && node client.js"
   },
   "keywords": [
     "web3",
@@ -15,7 +18,18 @@
   "author": "Mallikharjuna.Mamidi",
   "license": "ISC",
   "dependencies": {
+    "axios": "^0.26.1",
+    "body-parser": "^1.19.2",
+    "circular-json": "^0.5.9",
+    "cookie-parser": "^1.4.6",
+    "cors": "^2.8.5",
+    "crypto-js": "^4.1.1",
+    "dotenv": "^16.0.0",
+    "express": "^4.17.3",
     "ganache": "^7.0.3",
-    "web3": "^1.7.1"
+    "http": "^0.0.1-security",
+    "socket.io": "^4.4.1",
+    "web3": "^1.7.1",
+    "web3-eth-accounts": "^1.7.1"
   }
 }
