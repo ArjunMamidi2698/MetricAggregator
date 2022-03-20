@@ -22,6 +22,11 @@ app.use((req, res, next) => {
 	res.header("Access-Control-Allow-Origin", "*");
 	next();
 });
+// middleware to log every route
+app.use("/*", function route(req, res, next) {
+	addLog(req.baseUrl);
+	next();
+});
 
 function handleJSONResponse(res, data) {
 	res.setHeader("Content-Type", "application/json");
@@ -29,14 +34,18 @@ function handleJSONResponse(res, data) {
 	res.json(data);
 }
 // routes for the app
+
+// send Message from clients
 app.post("/sendMessage", (req, res) => {
 	aggregateMessage(req.body);
 	res.send("data received");
 });
+// get AggregratedValue with optional filter(success or fail)
 app.get("/aggregatedValue", (req, res) => {
 	var filter = req.query["filter"]; // success or fail
 	handleJSONResponse(res, { aggregatedValue: getAggregratedValue(filter) });
 });
+// get messages list with optional filter(success or fail)
 app.get("/getMessages", (req, res) => {
 	var filter = req.query["filter"]; // success or fail
 	const messages = getMessages(filter);

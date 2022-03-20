@@ -1,7 +1,12 @@
 const Web3 = require("web3");
-const SHA256 = require("crypto-js/sha256");
 const axios = require("axios");
-const { addLog } = require("../helper");
+const {
+	addLog,
+	validateConfiguredRange,
+	generateRandomValueInRange,
+	validateValue,
+	generateTransactionHash,
+} = require("../helper");
 
 let web3 = null; // cache
 const getWeb3Instance = () => {
@@ -9,11 +14,6 @@ const getWeb3Instance = () => {
 	return (web3 = new Web3(
 		process.env.PROVIDER_URL || "http://127.0.0.1:8545"
 	));
-};
-
-// value = "" + value + timestamp
-const generateTransactionHash = (value, timestamp) => {
-	return SHA256("" + value + timestamp).toString();
 };
 
 const signMessage = async (account, txHash) => {
@@ -70,9 +70,7 @@ const addMessage = async (accountKey, value, tamper) => {
 		let account = web3.eth.accounts.wallet[accountKey];
 		if (account == undefined)
 			throw new Error("Account not found with provided address or index");
-		// AJ - TODO - isNaN check
-		if (value <= 0)
-			throw new Error("Value should be positive number and atleast 1");
+		value = validateValue(value);
 		const txObj = await generateTransactionObject(account, value);
 		postTransactionToServer(txObj, tamper);
 		return txObj;
@@ -100,34 +98,26 @@ const initClientToServerMessagesPolling = () => {
 	initAccounts();
 
 	// polling
-	const web3 = getWeb3Instance();
-	const minValue = process.env.MESSAGE_VALUE_RANGE_MIN || 1;
-	const maxValue = process.env.MESSAGE_VALUE_RANGE_MAX || 10;
-	if (isNaN(minValue) || isNaN(maxValue)) {
-		throw new Error("Invalid input provided");
-	}
-	if (minValue > maxValue) {
-		throw new Error("minValue should not be greater than maxValue");
-	}
+	const [minValue, maxValue] = validateConfiguredRange(
+		process.env.MESSAGE_VALUE_RANGE_MIN || 1,
+		process.env.MESSAGE_VALUE_RANGE_MAX || 10
+	);
+	console.log("Starting Polling...");
 	const interval = setInterval(() => {
-		console.log(maxValue, minValue);
-		const value =
-			Math.floor(
-				Math.random() * (parseInt(maxValue) - parseInt(minValue) + 1)
-			) + parseInt(minValue);
+		const value = generateRandomValueInRange(minValue, maxValue);
 		addMessage(
-			Math.floor(Math.random() * accountsLength),
+			generateRandomValueInRange(0, accountsLength - 1),
 			value,
 			value == minValue || value == maxValue
 		);
 	}, process.env.MESSAGE_PUBLISH_INTERVAL || 1000);
 	setTimeout(() => {
+		console.log("Stopping Polling...");
 		clearInterval(interval);
-	}, 30000);
+	}, 60000); // stop polling after 1 minute
 };
 
 module.exports = {
-	getWeb3Instance,
 	postTransactionToServer,
 	initClientToServerMessagesPolling,
 	getAccounts,
