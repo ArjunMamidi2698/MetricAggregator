@@ -39,11 +39,11 @@ If the installation was successful, you should be able to run the following comm
 -   Generate Hash using `crypto-js`
 -   Sign MessageHash using web3 instance
 -   Periodically send messages from client to server
--	Send message from client through api
+-   Send message from client through api
 -   Validate signature by Recovering account address from signed message
 -   Aggregrate value
 -   Remove value from invalid Transactions
-- 	Fetch metrics from server through api
+-       Fetch metrics from server through api
 
 ## Steps to run
 
@@ -154,3 +154,7 @@ client port in the .env file should match the curl request port
 ## Postman Collection
 
 https://www.getpostman.com/collections/1a87bd76f15ded3910b6
+
+## Demo Video
+
+Watch Demo video here => /metricAggregator/metricAggregator.mp4
