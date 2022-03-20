@@ -43,7 +43,7 @@ If the installation was successful, you should be able to run the following comm
 -   Validate signature by Recovering account address from signed message
 -   Aggregrate value
 -   Remove value from invalid Transactions
--       Fetch metrics from server through api
+-	Fetch metrics from server through api
 
 ## Steps to run
 
