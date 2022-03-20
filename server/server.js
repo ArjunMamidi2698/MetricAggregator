@@ -12,6 +12,7 @@ const {
 	getMessages,
 	getAggregratedValue,
 } = require("./services/aggregator.service");
+const { addLog } = require("../helper");
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
