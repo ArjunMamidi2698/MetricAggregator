@@ -1,6 +1,6 @@
 # MetricAggregator
 
-Servive to aggregate periodically received metrics and to expose api's to fetch metric values
+Servive to aggregate periodically or manually through api received metrics and to expose api's to fetch metric values
 
 ## Prerequisites
 
@@ -39,9 +39,11 @@ If the installation was successful, you should be able to run the following comm
 -   Generate Hash using `crypto-js`
 -   Sign MessageHash using web3 instance
 -   Periodically send messages from client to server
+-	Send message from client through api
 -   Validate signature by Recovering account address from signed message
 -   Aggregrate value
 -   Remove value from invalid Transactions
+- 	Fetch metrics from server through api
 
 ## Steps to run
 
