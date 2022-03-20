@@ -19,6 +19,28 @@ const getInvalidMessages = () => {
 	return messagesFromClients.filter((messageObj) => !messageObj.isValid);
 };
 const getAllMessages = () => messagesFromClients;
+const getMessages = (filter) => {
+	switch (filter) {
+		case "success":
+			return getValidMessages();
+		case "fail":
+			return getInvalidMessages();
+		default:
+			return getAllMessages();
+	}
+};
+const aggregate = (filter) => {
+	return getMessages(filter)
+		.map((message) => message.value)
+		.reduce((partialSum, a) => partialSum + a, 0);
+};
+const getAggregratedValue = (filter) => {
+	if (filter == "success" || filter == "fail") return aggregate(filter);
+	return {
+		success: aggregate("success"),
+		fail: aggregate("fail"),
+	};
+};
 const aggregateMessage = async (tx) => {
 	aggregatedValue += tx.value;
 	addLog("aggregatedValue: " + aggregatedValue);
@@ -38,9 +60,7 @@ const aggregateMessage = async (tx) => {
 };
 
 module.exports = {
-	aggregatedValue,
+	getAggregratedValue,
 	aggregateMessage,
-	getValidMessages,
-	getInvalidMessages,
-	getAllMessages,
+	getMessages,
 };

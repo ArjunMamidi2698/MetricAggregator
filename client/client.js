@@ -7,6 +7,8 @@ const {
 	getWeb3Instance,
 	postTransactionToServer,
 	initClientToServerMessagesPolling,
+	getAccounts,
+	addMessage,
 } = require("./client.service");
 const { addLog } = require("../helper");
 const server = require("http").createServer(app);
@@ -24,11 +26,26 @@ app.use((req, res, next) => {
 	next();
 });
 
+function handleJSONResponse(res, data) {
+	res.setHeader("Content-Type", "application/json");
+	app.set("json spaces", 4);
+	res.json(data);
+}
 // // send a message to server
 // app.post("/postMessage", async (req, res) => {
 	
 // });
-
+// AJ - TODO - add account
+// get accounts
+app.get("/getAccounts", (req, res) => {
+	handleJSONResponse(res, { accounts: getAccounts() });
+});
+// add Message
+app.post("/addMessage", async (req, res) => {
+	const {accountKey, value, tamper } = req.body;
+	const msgObj = await addMessage(accountKey, value, tamper);
+	handleJSONResponse(res, msgObj);
+});
 initClientToServerMessagesPolling();
 
 // Server listening

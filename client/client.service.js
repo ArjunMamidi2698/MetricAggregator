@@ -36,15 +36,14 @@ const generateTransactionObject = async (account, value) => {
 	return txObj;
 };
 
-const postTransactionToServer = async (account, value) => {
+const postTransactionToServer = async (txObj, tamper) => {
 	try {
-		const txObj = await generateTransactionObject(account, value);
 		// intentionally fail some transactions
-		if (txObj.value == 5 || txObj.value == 10) {
+		if (tamper) {
 			console.log(
 				"intentionally failing this to verify aggregate functionality"
 			);
-			txObj.value = 7;
+			txObj.signature = txObj.signature.substring(2);
 		}
 		axios
 			.post(
@@ -65,8 +64,26 @@ const postTransactionToServer = async (account, value) => {
 	return;
 };
 
+const addMessage = async (accountKey, value, tamper) => {
+	try {
+		const web3 = getWeb3Instance();
+		let account = web3.eth.accounts.wallet[accountKey];
+		if (account == undefined)
+			throw new Error("Account not found with provided address or index");
+		// AJ - TODO - isNaN check
+		if (value <= 0)
+			throw new Error("Value should be positive number and atleast 1");
+		const txObj = await generateTransactionObject(account, value);
+		postTransactionToServer(txObj, tamper);
+		return txObj;
+	} catch (error) {
+		return { error: error.message };
+	}
+};
+
 let accountsLength = process.env.ACCOUNTS_LENGTH || 10; // cache
 let accounts = []; // cache
+const getAccounts = () => accounts;
 const initAccounts = () => {
 	const web3 = getWeb3Instance();
 	addLog(`Creating ${accountsLength} accounts in wallet......`);
@@ -94,13 +111,14 @@ const initClientToServerMessagesPolling = () => {
 	}
 	const interval = setInterval(() => {
 		console.log(maxValue, minValue);
-		postTransactionToServer(
-			web3.eth.accounts.wallet[
-				Math.floor(Math.random() * accountsLength)
-			],
+		const value =
 			Math.floor(
 				Math.random() * (parseInt(maxValue) - parseInt(minValue) + 1)
-			) + parseInt(minValue)
+			) + parseInt(minValue);
+		addMessage(
+			Math.floor(Math.random() * accountsLength),
+			value,
+			value == minValue || value == maxValue
 		);
 	}, process.env.MESSAGE_PUBLISH_INTERVAL || 1000);
 	setTimeout(() => {
@@ -112,4 +130,6 @@ module.exports = {
 	getWeb3Instance,
 	postTransactionToServer,
 	initClientToServerMessagesPolling,
+	getAccounts,
+	addMessage,
 };

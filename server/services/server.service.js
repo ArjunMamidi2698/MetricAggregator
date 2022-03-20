@@ -13,6 +13,7 @@ const generateTransactionHash = (value, timestamp) => {
 
 const recoverAccountAddress = async ({ value, timestamp, signature }) => {
 	try {
+		// AJ - TODO - validations( value, signature(null check))
 		// hashed message before signing
 		const messageHash = generateTransactionHash(value, timestamp);
 		const recoveredAddress = await getWeb3Instance().eth.accounts.recover(
