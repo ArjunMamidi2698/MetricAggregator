@@ -1,12 +1,13 @@
 const SHA256 = require("crypto-js/sha256");
 
 // logs
-function addLog(data) {
+function addLog(data, functionName) {
+	const caller = functionName == undefined ? addLog.caller?.name : functionName;
 	// logFormat: date timestamp - [callerName]: <data>
 	console.log(
 		"\x1b[33m%s\x1b[0m",
 		new Date(),
-		" -  [" + "\x1b[36m" + addLog.caller?.name + "\x1b[0m" + "]: " + data
+		" -  [" + "\x1b[36m" + caller + "\x1b[0m" + "]: " + data
 	);
 }
 
