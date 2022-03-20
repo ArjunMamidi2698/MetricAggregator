@@ -76,7 +76,7 @@ $ cd metricAggregator
 $ npm i
 ```
 
-#### Ganache ( update PROVIDER_URL in .env )
+#### Ganache ( optional, but if using update PROVIDER_URL in .env )
 
 ```
 $ npm run ganache
@@ -123,7 +123,7 @@ server port in the .env file should match the curl request port
 
 ```
 
-### CLient
+### Client
 
 client port in the .env file should match the curl request port
 

@@ -7,7 +7,9 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "ganache": "ganache --wallet.seed myCustomSeed",
     "server": "cd server && node server.js",
-    "client": "cd client && node client.js"
+    "server:dev": "cd server && nodemon server.js",
+    "client": "cd client && node client.js",
+    "client:dev": "cd client && nodemon client.js"
   },
   "keywords": [
     "web3",
@@ -28,6 +30,7 @@
     "express": "^4.17.3",
     "ganache": "^7.0.3",
     "http": "^0.0.1-security",
+    "nodemon": "^2.0.15",
     "socket.io": "^4.4.1",
     "web3": "^1.7.1",
     "web3-eth-accounts": "^1.7.1"
