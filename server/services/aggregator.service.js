@@ -43,7 +43,7 @@ const getAggregratedValue = (filter) => {
 };
 const aggregateMessage = async (tx) => {
 	aggregatedValue += tx.value;
-	addLog("aggregatedValue: " + aggregatedValue);
+	addLog("Received Value:" + tx.value + "\naggregatedValue: " + aggregatedValue);
 	const isValid = await isValidTransaction(tx);
 	messagesFromClients.push({
 		address: tx.address,
@@ -51,11 +51,13 @@ const aggregateMessage = async (tx) => {
 		isValid,
 	});
 	if (!isValid) {
-		aggregatedValue -= tx.value;
-		addLog(
-			`Transaction failed to report, removing \x1b[31m${tx.value}\x1b[0m from aggregated Value`
-		);
-		addLog("aggregatedValue: " + aggregatedValue);
+		setTimeout(function removeFromAggregration(){
+			aggregatedValue -= tx.value;
+			addLog(
+				`Transaction failed to report, removing stale value \x1b[31m${tx.value}\x1b[0m from aggregated Value`
+			);
+			addLog("aggregatedValue: " + aggregatedValue);
+		}, process.env.INVALID_VALUE_STALE_TIMEOUT || 0);
 	}
 };
 
