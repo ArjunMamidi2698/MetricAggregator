@@ -16,6 +16,7 @@ const getMessages = (filter) => {
 	return getMetricAggregateInstance().getMessages(filter);
 };
 module.exports = {
+	getMetricAggregateInstance,
 	getAggregratedValue,
 	aggregateMessage,
 	getMessages,

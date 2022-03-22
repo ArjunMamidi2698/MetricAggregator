@@ -42,8 +42,8 @@ If the installation was successful, you should be able to run the following comm
 -   Send message from client through api
 -   Validate signature by Recovering account address from signed message
 -   Aggregrate value
--   Remove value from invalid Transactions
--	Fetch metrics from server through api
+-   Remove value for invalid Transactions after configured stale timeout
+-   Fetch metrics from server through api
 
 ## Steps to run
 
@@ -69,6 +69,8 @@ $ cd metricAggregator
 	MESSAGE_PUBLISH_INTERVAL=<interval milliseconds> # publish interval to send messages
 	MESSAGE_VALUE_RANGE_MIN=<min value> # atleast 1 and not greater than max
 	MESSAGE_VALUE_RANGE_MAX=<max value>
+
+	INVALID_VALUE_STALE_TIMEOUT=<interval in milliseconds> # stale timeout for an invalid value to get removed from aggregated value
 
 ```
 

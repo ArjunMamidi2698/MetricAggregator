@@ -54,6 +54,13 @@ class MetricAggregator {
 		else this.aggregatedValue = this.aggregatedValue + value;
 	}
 
+	formatMessage(msgObj, isValid) {
+		return {
+			address: msgObj.address,
+			value: msgObj.value,
+			isValid,
+		};
+	}
 	async addMessage(msgObj) {
 		const self = this;
 		self.updateAggregatedValue(msgObj.value);
@@ -65,11 +72,7 @@ class MetricAggregator {
 			"addMessage"
 		);
 		const isValid = await isValidTransaction(msgObj);
-		this.messagesFromClients.push({
-			address: msgObj.address,
-			value: msgObj.value,
-			isValid,
-		});
+		this.messagesFromClients.push(this.formatMessage(msgObj, isValid));
 		if (!isValid) {
 			setTimeout(() => {
 				self.updateAggregatedValue(msgObj.value, true);
@@ -81,8 +84,14 @@ class MetricAggregator {
 					"aggregatedValue: " + this.aggregatedValue,
 					"removeFromAggregration"
 				);
-			}, process.env.INVALID_VALUE_STALE_TIMEOUT || 0);
+			}, process.env.INVALID_VALUE_STALE_TIMEOUT || 5000);
 		}
+		Promise.resolve();
+	}
+
+	reset() {
+		this.aggregatedValue = 0;
+		this.messagesFromClients = [];
 	}
 }
 

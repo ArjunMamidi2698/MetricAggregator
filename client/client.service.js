@@ -1,4 +1,3 @@
-const Web3 = require("web3");
 const axios = require("axios");
 const {
 	addLog,
@@ -7,19 +6,7 @@ const {
 	validateValue,
 	generateTransactionHash,
 } = require("../helper");
-
-let web3 = null; // cache
-const getWeb3Instance = () => {
-	if (web3 != null) return web3;
-	return (web3 = new Web3(
-		process.env.PROVIDER_URL || "http://127.0.0.1:8545"
-	));
-};
-
-const signMessage = async (account, txHash) => {
-	const { signature } = await account.sign(txHash);
-	return signature;
-};
+const { signMessage, findAccount, createAccounts } = require("../web3Utils");
 
 const generateTransactionObject = async (account, value) => {
 	const timestamp = Date.now();
@@ -66,8 +53,7 @@ const postTransactionToServer = async (txObj, tamper) => {
 
 const addMessage = async (accountKey, value, tamper) => {
 	try {
-		const web3 = getWeb3Instance();
-		let account = web3.eth.accounts.wallet[accountKey];
+		let account = findAccount(accountKey);
 		if (account == undefined)
 			throw new Error("Account not found with provided address or index");
 		value = validateValue(value);
@@ -83,15 +69,14 @@ let accountsLength = process.env.ACCOUNTS_LENGTH || 10; // cache
 let accounts = []; // cache
 const getAccounts = () => accounts;
 const initAccounts = () => {
-	const web3 = getWeb3Instance();
 	addLog(`Creating ${accountsLength} accounts in wallet......`);
-	web3.eth.accounts.wallet.create(accountsLength);
+	createAccounts(accountsLength);
 	addLog(`${accountsLength} Accounts CREATED`);
 
 	// save to cached array
 	accounts = []; // reset
 	for (let index = 0; index < accountsLength; index++) {
-		accounts.push(web3.eth.accounts.wallet[index]);
+		accounts.push(findAccount(index));
 	}
 };
 const initClientToServerMessagesPolling = () => {
@@ -122,4 +107,5 @@ module.exports = {
 	initClientToServerMessagesPolling,
 	getAccounts,
 	addMessage,
+	generateTransactionObject,
 };

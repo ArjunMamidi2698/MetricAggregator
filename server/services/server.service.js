@@ -1,19 +1,12 @@
-const Web3 = require("web3");
-
 const { generateTransactionHash } = require("../../helper");
+const { recoverAccountAddress } = require("../../web3Utils");
 
-const web3 = null; // cache
-const getWeb3Instance = () => {
-	if (web3 != null) return web3;
-	return new Web3(process.env.PROVIDER_URL || "http://127.0.0.1:8545");
-};
-
-const recoverAccountAddress = async ({ value, timestamp, signature }) => {
+const getRecoveredAccountAddress = async ({ value, timestamp, signature }) => {
 	try {
 		if (!signature) throw new Error("Signature is required");
 		// hashed message before signing
 		const messageHash = generateTransactionHash(value, timestamp);
-		const recoveredAddress = await getWeb3Instance().eth.accounts.recover(
+		const recoveredAddress = await recoverAccountAddress(
 			messageHash,
 			signature
 		);
@@ -24,13 +17,13 @@ const recoverAccountAddress = async ({ value, timestamp, signature }) => {
 };
 const isValidTransaction = async (tx) => {
 	try {
-		const recoveredAddress = await recoverAccountAddress(tx);
+		const recoveredAddress = await getRecoveredAccountAddress(tx);
 		return recoveredAddress === tx.address;
 	} catch (error) {
 		return false;
 	}
 };
 module.exports = {
-	getWeb3Instance,
 	isValidTransaction,
+	getRecoveredAccountAddress,
 };
