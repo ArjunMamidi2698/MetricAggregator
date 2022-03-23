@@ -80,7 +80,7 @@ $ cd metricAggregator
 $ npm i
 ```
 
-#### Ganache ( optional, but if using update PROVIDER_URL in .env )
+#### Ganache ( optional, but if using, update PROVIDER_URL in .env )
 
 ```
 $ npm run ganache

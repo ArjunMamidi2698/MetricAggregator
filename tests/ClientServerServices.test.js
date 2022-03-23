@@ -11,6 +11,7 @@ const {
 	createAccounts,
 	addAccountToWallet,
 	getAccountsLengthInWallet,
+	clearAccounts,
 } = require("../web3Utils");
 require("dotenv").config({ path: "./.env" }); // read properties from .env
 
@@ -18,19 +19,20 @@ let web3 = getWeb3Instance();
 
 describe("Accounts in Etherium Wallet", () => {
 	it("should create 5 accounts in wallet", () => {
+		clearAccounts();
 		createAccounts(5);
 		assert.equal(getAccountsLengthInWallet(), 5);
 	});
 	it("should find account in wallet by id", () => {
 		const prevAccountsLength = getAccountsLengthInWallet();
-		const { index, address: newAddress } = addAccountToWallet(web3);
+		const { index, address: newAddress } = addAccountToWallet();
 		assert.equal(getAccountsLengthInWallet(), prevAccountsLength + 1);
 		const { address } = findAccount(index);
 		assert.equal(newAddress, address);
 	});
 	it("should find account in wallet by address", () => {
 		const prevAccountsLength = getAccountsLengthInWallet();
-		const { address: newAddress } = addAccountToWallet(web3);
+		const { address: newAddress } = addAccountToWallet();
 		assert.equal(getAccountsLengthInWallet(), prevAccountsLength + 1);
 		const { address } = findAccount(newAddress);
 		assert.equal(newAddress, address);

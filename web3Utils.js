@@ -35,9 +35,10 @@ const addAccountToWallet = () => {
 	const web3 = getWeb3Instance();
 	return web3.eth.accounts.wallet.add(web3.utils.randomHex(32));
 };
+const clearAccounts = () => getWeb3Instance().eth.accounts.wallet.clear();
 
 module.exports = {
 	getWeb3Instance,
 	signMessage, recoverAccountAddress,
-	findAccount, getAccountsLengthInWallet, createAccounts, addAccountToWallet,
+	findAccount, getAccountsLengthInWallet, createAccounts, addAccountToWallet, clearAccounts
 };

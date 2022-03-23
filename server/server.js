@@ -6,7 +6,7 @@ const cors = require("cors");
 const server = require("http").createServer(app);
 require("dotenv").config({ path: "../.env" });
 
-const port = process.env.SERVER_PORT;
+const port = process.env.SERVER_PORT || process.env.PORT || 2022;
 const {
 	aggregateMessage,
 	getMessages,
@@ -39,7 +39,7 @@ function handleJSONResponse(res, data) {
 // send Message from clients
 app.post("/sendMessage", (req, res) => {
 	aggregateMessage(req.body);
-	res.send("data received");
+	handleJSONResponse(res, { message: "data Received" });
 });
 // get AggregratedValue with optional filter(success or fail)
 app.get("/aggregatedValue", (req, res) => {
@@ -61,3 +61,5 @@ app.get("/getMessages", (req, res) => {
 server.listen(port, () => {
 	console.log(`listening at ${port} port!!!!`);
 });
+
+module.exports = server;

@@ -7,6 +7,7 @@ const {
 	generateTransactionHash,
 } = require("../helper");
 const { signMessage, findAccount, createAccounts } = require("../web3Utils");
+require("dotenv").config({ path: "../.env" }); // read properties from .env
 
 const generateTransactionObject = async (account, value) => {
 	const timestamp = Date.now();
@@ -65,10 +66,11 @@ const addMessage = async (accountKey, value, tamper) => {
 	}
 };
 
-let accountsLength = process.env.ACCOUNTS_LENGTH || 10; // cache
+let accountsLength = 0; // cache
 let accounts = []; // cache
 const getAccounts = () => accounts;
-const initAccounts = () => {
+const initAccounts = (count) => {
+	accountsLength = count;
 	addLog(`Creating ${accountsLength} accounts in wallet......`);
 	createAccounts(accountsLength);
 	addLog(`${accountsLength} Accounts CREATED`);
@@ -80,7 +82,6 @@ const initAccounts = () => {
 	}
 };
 const initClientToServerMessagesPolling = () => {
-	initAccounts();
 
 	// polling
 	const [minValue, maxValue] = validateConfiguredRange(
@@ -108,4 +109,5 @@ module.exports = {
 	getAccounts,
 	addMessage,
 	generateTransactionObject,
+	initAccounts,
 };

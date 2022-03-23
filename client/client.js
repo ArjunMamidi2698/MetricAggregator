@@ -7,9 +7,10 @@ const {
 	initClientToServerMessagesPolling,
 	getAccounts,
 	addMessage,
+	initAccounts,
 } = require("./client.service");
 const { addLog } = require("../helper");
-const server = require("http").createServer(app);
+const clientServer = require("http").createServer(app);
 
 require("dotenv").config({ path: "../.env" }); // read properties from .env
 const port = process.env.CLIENT_PORT || process.env.PORT || 3022;
@@ -32,7 +33,11 @@ app.use("/*", function route(req, res, next) {
 function handleJSONResponse(res, data) {
 	res.setHeader("Content-Type", "application/json");
 	app.set("json spaces", 4);
-	res.json(data);
+	if( data.hasOwnProperty("error") ) {
+		res.status(201).json(data);
+	} else {
+		res.json(data);
+	}
 }
 // get accounts
 app.get("/getAccounts", (req, res) => {
@@ -44,11 +49,17 @@ app.post("/addMessage", async (req, res) => {
 	const msgObj = await addMessage(accountKey, value, tamper);
 	handleJSONResponse(res, msgObj);
 });
+// create accounts
+const accountsLength = process.env.ACCOUNTS_LENGTH || 10;
+initAccounts(accountsLength);
 
 // init client to server polling
-initClientToServerMessagesPolling();
+if (!process.env.ENV_VAR || process.env.ENV_VAR != "test")
+	initClientToServerMessagesPolling();
 
 // Server listening
-server.listen(port, () => {
+clientServer.listen(port, () => {
 	console.log(`listening at ${port} port!!!!`);
 });
+
+module.exports = clientServer;

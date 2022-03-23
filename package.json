@@ -4,13 +4,12 @@
   "description": "Servive to aggregate periodically received metrics and to expose api's to fetch data",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "ENV_VAR=test mocha tests/*.test.js tests/api/*.test.js",
     "ganache": "ganache --wallet.seed myCustomSeed",
     "server": "cd server && node server.js",
     "server:dev": "cd server && nodemon server.js",
     "client": "cd client && node client.js",
-    "client:dev": "cd client && nodemon client.js",
-    "test": "mocha tests/*.test.js"
+    "client:dev": "cd client && nodemon client.js"
   },
   "keywords": [
     "web3",
@@ -23,6 +22,8 @@
   "dependencies": {
     "axios": "^0.26.1",
     "body-parser": "^1.19.2",
+    "chai": "^4.3.6",
+    "chai-http": "^4.3.0",
     "circular-json": "^0.5.9",
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
@@ -33,6 +34,7 @@
     "http": "^0.0.1-security",
     "nodemon": "^2.0.15",
     "socket.io": "^4.4.1",
+    "supertest": "^6.2.2",
     "web3": "^1.7.1",
     "web3-eth-accounts": "^1.7.1"
   }

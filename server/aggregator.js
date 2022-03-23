@@ -40,7 +40,7 @@ class MetricAggregator {
 			.reduce((partialSum, a) => partialSum + a, 0);
 	}
 
-	getAggregratedValue(filter) {
+	getAggregratedValue(filter) { // AJ - TODO - CHECK THIS, SHOULD RETURN THIS.AGGREGATED VALUE
 		if (filter == "success" || filter == "fail")
 			return this.aggregate(filter);
 		return {
@@ -71,7 +71,7 @@ class MetricAggregator {
 				this.aggregatedValue,
 			"addMessage"
 		);
-		const isValid = await isValidTransaction(msgObj);
+		const isValid = await isValidTransaction(msgObj); // AJ - TODO - CHECK THIS, TRY TO ADD PENDING AS STATUS AND ACTUAL STATUS AFTER STALE TIMEOUT
 		this.messagesFromClients.push(this.formatMessage(msgObj, isValid));
 		if (!isValid) {
 			setTimeout(() => {
