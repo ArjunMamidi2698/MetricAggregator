@@ -9,21 +9,15 @@ const {
 const { signMessage, findAccount, createAccounts } = require("../web3Utils");
 require("dotenv").config({ path: "../.env" }); // read properties from .env
 
-const generateTransactionObject = async (account, value) => {
-	const timestamp = Date.now();
-	const signature = await signMessage(
-		account,
-		generateTransactionHash(value, timestamp)
-	);
-	const txObj = {
-		timestamp,
-		address: account.address,
-		value,
-		signature,
-	};
-	return txObj;
-};
-
+/**
+ * Will do a post request to server and pass transaction object as data.
+ * Transaction Object and tamper are taken as params.
+ * if tamper is set as true, then signature from txObj will be modified/tampered and post to server.
+ *
+ * @param {object} txObj
+ * @param {boolean} tamper
+ *
+ **/
 const postTransactionToServer = async (txObj, tamper) => {
 	try {
 		// intentionally fail some transactions
@@ -52,6 +46,48 @@ const postTransactionToServer = async (txObj, tamper) => {
 	return;
 };
 
+/**
+ * Generates a Transaction object which contains timestamp, address( account who creating the message ), value, signature.
+ * Takes account( valid account created in eth wallet ) and value( valid positive number ) as params.
+ * Generates a hash for the message with timestamp using crypto-js/SHA256
+ * Generated the signature with the hash message and return the transaction object with all the attributes.
+ *
+ * @param {object} account
+ * @param {number} value
+ *
+ * @returns {object} transactionObject
+ *
+ **/
+const generateTransactionObject = async (account, value) => {
+	const timestamp = Date.now();
+	const signature = await signMessage(
+		account,
+		generateTransactionHash(value, timestamp)
+	);
+	const txObj = {
+		timestamp,
+		address: account.address,
+		value,
+		signature,
+	};
+	return txObj;
+};
+
+/**
+ * This method will take accountKey, value and tamper as params.
+ * Will validate "accountKey" and throw error if any and used to find account with the key from the Etherium wallet.
+ * Will validate "value" and throw error if any and used to generate the txObj
+ * "tamper" param is used to intentionally fail some messages to verify aggregate logic in server.
+ * Will generate a txObj if all values are validated and post the generated txObj to server.
+ * Returns the posted txObj or errorObj if any.
+ *
+ * @param {number | string} accountKey
+ * @param {number} value
+ * @param {boolean} tamper
+ *
+ * @returns {object} txObj or errorObj
+ *
+ **/
 const addMessage = async (accountKey, value, tamper) => {
 	try {
 		let account = findAccount(accountKey);
@@ -68,7 +104,22 @@ const addMessage = async (accountKey, value, tamper) => {
 
 let accountsLength = 0; // cache
 let accounts = []; // cache
+/**
+ *
+ * Returns the stored accounts list
+ *
+ * @returns {Array}
+ *
+ **/
 const getAccounts = () => accounts;
+/**
+ *
+ * Takes count as param and Creates accounts in Etherium wallet.
+ * Also will store created accounts in array.
+ *
+ * @param {number} count
+ *
+ **/
 const initAccounts = (count) => {
 	accountsLength = count;
 	addLog(`Creating ${accountsLength} accounts in wallet......`);
@@ -81,8 +132,15 @@ const initAccounts = (count) => {
 		accounts.push(findAccount(index));
 	}
 };
-const initClientToServerMessagesPolling = () => {
 
+/**
+ *
+ * This will starts the polling for 1 minute with configured interval.
+ * Will add message and post them to server for every publish interval.
+ * Account and value would be taken as random in configured range.
+ *
+ **/
+const initClientToServerMessagesPolling = () => {
 	// polling
 	const [minValue, maxValue] = validateConfiguredRange(
 		process.env.MESSAGE_VALUE_RANGE_MIN || 1,
@@ -105,9 +163,8 @@ const initClientToServerMessagesPolling = () => {
 
 module.exports = {
 	postTransactionToServer,
-	initClientToServerMessagesPolling,
-	getAccounts,
-	addMessage,
 	generateTransactionObject,
-	initAccounts,
+	addMessage,
+	getAccounts, initAccounts,
+	initClientToServerMessagesPolling,
 };

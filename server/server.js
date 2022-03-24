@@ -29,11 +29,12 @@ app.use("/*", function route(req, res, next) {
 	next();
 });
 
+// server response in json format
 function handleJSONResponse(res, data) {
 	res.setHeader("Content-Type", "application/json");
 	app.set("json spaces", 4);
 	if (data.hasOwnProperty("error")) {
-		res.status(201).json(data);
+		res.status(201).json(data); // if any error in data, sets status to 201
 	} else {
 		res.json(data);
 	}
@@ -49,6 +50,7 @@ app.post("/sendMessage", (req, res) => {
 		handleJSONResponse(res, { message: "data Received" });
 	}
 });
+
 // get AggregratedValue with optional filter(success or fail)
 app.get("/aggregatedValue", (req, res) => {
 	var filter = req.query["filter"]; // success or fail

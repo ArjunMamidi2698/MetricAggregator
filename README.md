@@ -104,6 +104,13 @@ For devlopement
 $ npm run client:dev
 ```
 
+#### Tests ( make sure server and client servers are stopped )
+
+```
+$ npm run test
+
+```
+
 ## Api's exposed:
 
 ### Server

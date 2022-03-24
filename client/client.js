@@ -33,8 +33,8 @@ app.use("/*", function route(req, res, next) {
 function handleJSONResponse(res, data) {
 	res.setHeader("Content-Type", "application/json");
 	app.set("json spaces", 4);
-	if( data.hasOwnProperty("error") ) {
-		res.status(201).json(data);
+	if (data.hasOwnProperty("error")) {
+		res.status(201).json(data); // if any error in data, sets status to 201
 	} else {
 		res.json(data);
 	}
@@ -49,6 +49,7 @@ app.post("/addMessage", async (req, res) => {
 	const msgObj = await addMessage(accountKey, value, tamper);
 	handleJSONResponse(res, msgObj);
 });
+
 // create accounts
 const accountsLength = process.env.ACCOUNTS_LENGTH || 10;
 initAccounts(accountsLength);
