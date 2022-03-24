@@ -1,4 +1,4 @@
-const { addLog } = require("../helper");
+const { addLog } = require("../utils/serviceUtils");
 const { isValidTransaction } = require("./services/server.service");
 class MetricAggregator {
 	/**

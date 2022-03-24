@@ -5,7 +5,7 @@ let server = require("../../server/server");
 const {
 	getMetricAggregateInstance,
 } = require("../../server/services/aggregator.service");
-const { findAccount, createAccounts } = require("../../web3Utils");
+const { findAccount, createAccounts } = require("../../utils/web3Utils");
 let should = chai.should();
 
 chai.use(chaiHttp);

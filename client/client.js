@@ -9,7 +9,7 @@ const {
 	addMessage,
 	initAccounts,
 } = require("./client.service");
-const { addLog } = require("../helper");
+const { addLog } = require("../utils/serviceUtils");
 const clientServer = require("http").createServer(app);
 
 require("dotenv").config({ path: "../.env" }); // read properties from .env

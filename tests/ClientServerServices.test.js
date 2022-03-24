@@ -1,6 +1,6 @@
 const assert = require("assert");
 const { generateTransactionObject } = require("../client/client.service");
-const { generateTransactionHash } = require("../helper");
+const { generateTransactionHash } = require("../utils/serviceUtils");
 const {
 	getRecoveredAccountAddress,
 	isValidTransaction,
@@ -12,7 +12,7 @@ const {
 	addAccountToWallet,
 	getAccountsLengthInWallet,
 	clearAccounts,
-} = require("../web3Utils");
+} = require("../utils/web3Utils");
 require("dotenv").config({ path: "./.env" }); // read properties from .env
 
 let web3 = getWeb3Instance();

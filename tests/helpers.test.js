@@ -3,7 +3,7 @@ const {
 	validateValue,
 	validateConfiguredRange,
 	generateTransactionHash,
-} = require("../helper");
+} = require("../utils/serviceUtils");
 
 describe("Helpers", () => {
 	describe("Validations", () => {

@@ -6,7 +6,7 @@ const {
 	getMessages,
 	getAggregratedValue,
 } = require("../server/services/aggregator.service");
-const { findAccount, createAccounts } = require("../web3Utils");
+const { findAccount, createAccounts } = require("../utils/web3Utils");
 
 describe("Aggregrate Message", () => {
 	describe("MetricAggregator class", () => {

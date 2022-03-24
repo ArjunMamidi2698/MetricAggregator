@@ -1,7 +1,7 @@
 let chai = require("chai");
 let chaiHttp = require("chai-http");
 let clientServer = require("../../client/client");
-const { findAccount } = require("../../web3Utils");
+const { findAccount } = require("../../utils/web3Utils");
 let should = chai.should();
 require("dotenv").config({ path: "../../.env" }); // read properties from .env
 

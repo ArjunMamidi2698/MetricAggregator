@@ -5,8 +5,8 @@ const {
 	generateRandomValueInRange,
 	validateValue,
 	generateTransactionHash,
-} = require("../helper");
-const { signMessage, findAccount, createAccounts } = require("../web3Utils");
+} = require("../utils/serviceUtils");
+const { signMessage, findAccount, createAccounts } = require("../utils/web3Utils");
 require("dotenv").config({ path: "../.env" }); // read properties from .env
 
 /**

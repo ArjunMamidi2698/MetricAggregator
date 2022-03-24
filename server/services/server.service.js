@@ -1,5 +1,5 @@
-const { generateTransactionHash } = require("../../helper");
-const { recoverAccountAddress } = require("../../web3Utils");
+const { generateTransactionHash } = require("../../utils/serviceUtils");
+const { recoverAccountAddress } = require("../../utils/web3Utils");
 
 /**
  * Takes Message object from client as param and validates the signature.
