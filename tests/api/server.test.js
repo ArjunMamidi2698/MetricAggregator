@@ -71,8 +71,10 @@ describe("Server GET API's", () => {
 			res.body.should.be.a("object");
 			res.body.should.have.property("aggregatedValue");
 			res.body.aggregatedValue.should.be.a("object");
+			res.body.aggregatedValue.should.have.property("aggregatedValue");
 			res.body.aggregatedValue.should.have.property("success");
 			res.body.aggregatedValue.should.have.property("fail");
+			res.body.aggregatedValue.should.have.property("aggregatedValue").eql(201); // will remove failed valie after stale timeout
 			res.body.aggregatedValue.should.have.property("success").eql(100);
 			res.body.aggregatedValue.should.have.property("fail").eql(101);
 		});
@@ -111,7 +113,7 @@ describe("Server GET API's", () => {
 			res.body.aggregatedValue.should.be.a("object");
 			res.body.should.have
 				.property("aggregatedValue")
-				.eql({ success: 100, fail: 101 });
+				.eql({ aggregatedValue: 201, success: 100, fail: 101 });
 			res.body.should.have.property("messages");
 			res.body.should.have.property("messages").eql([
 				{

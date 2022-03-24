@@ -10,8 +10,11 @@ const getAggregratedValue = (filter) => {
 	return getMetricAggregateInstance().getAggregratedValue(filter);
 };
 const aggregateMessage = (tx) => {
-	// AJ - TODO - ERROR HANDLING
-	getMetricAggregateInstance().addMessage(tx);
+	try {
+		return getMetricAggregateInstance().addMessage(tx);
+	} catch (error) {
+		return { error: error.message };
+	}
 };
 const getMessages = (filter) => {
 	return getMetricAggregateInstance().getMessages(filter);

@@ -32,14 +32,22 @@ app.use("/*", function route(req, res, next) {
 function handleJSONResponse(res, data) {
 	res.setHeader("Content-Type", "application/json");
 	app.set("json spaces", 4);
-	res.json(data);
+	if (data.hasOwnProperty("error")) {
+		res.status(201).json(data);
+	} else {
+		res.json(data);
+	}
 }
 // routes for the app
 
 // send Message from clients
 app.post("/sendMessage", (req, res) => {
-	aggregateMessage(req.body);
-	handleJSONResponse(res, { message: "data Received" });
+	const msgRes = aggregateMessage(req.body);
+	if (msgRes.hasOwnProperty("error")) {
+		handleJSONResponse(res, msgRes);
+	} else {
+		handleJSONResponse(res, { message: "data Received" });
+	}
 });
 // get AggregratedValue with optional filter(success or fail)
 app.get("/aggregatedValue", (req, res) => {

@@ -150,6 +150,7 @@ describe("Aggregrate Message", () => {
 		});
 		it("get correct Aggregated object with both success and fail messages", async () => {
 			assert.deepEqual(getAggregratedValue(), {
+				aggregatedValue: 401, // will remove failed valie after stale timeout 
 				success: 300,
 				fail: 101,
 			});
