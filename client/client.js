@@ -10,7 +10,7 @@ const {
 	initAccounts,
 } = require("./client.service");
 const { addLog } = require("../utils/serviceUtils");
-const clientServer = require("http").createServer(app);
+const clientsServer = require("http").createServer(app);
 
 require("dotenv").config({ path: "../.env" }); // read properties from .env
 const port = process.env.CLIENT_PORT || process.env.PORT || 3022;
@@ -55,12 +55,16 @@ const accountsLength = process.env.ACCOUNTS_LENGTH || 10;
 initAccounts(accountsLength);
 
 // init client to server polling
-if (!process.env.ENV_VAR || process.env.ENV_VAR != "test")
+if (
+	!process.env.ENV_VAR ||
+	process.env.ENV_VAR != "test" ||
+	process.env.ENV_VAR == "integrationTest"
+)
 	initClientToServerMessagesPolling();
 
 // Server listening
-clientServer.listen(port, () => {
+clientsServer.listen(port, () => {
 	console.log(`listening at ${port} port!!!!`);
 });
 
-module.exports = clientServer;
+module.exports = clientsServer;

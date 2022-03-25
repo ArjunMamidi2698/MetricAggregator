@@ -4,7 +4,7 @@
   "description": "Servive to aggregate periodically received metrics and to expose api's to fetch data",
   "main": "index.js",
   "scripts": {
-    "test": "ENV_VAR=test mocha tests/*.test.js tests/api/*.test.js",
+    "test": "env ENV_VAR=test mocha tests/*.test.js tests/api/*.test.js && env ENV_VAR=integrationTest mocha tests/integration/*.test.js -r dotenv/config --exit",
     "ganache": "ganache --wallet.seed myCustomSeed",
     "server": "cd server && node server.js",
     "server:dev": "cd server && nodemon server.js",
@@ -32,6 +32,7 @@
     "express": "^4.17.3",
     "ganache": "^7.0.3",
     "http": "^0.0.1-security",
+    "mocha": "^9.2.2",
     "nodemon": "^2.0.15",
     "socket.io": "^4.4.1",
     "supertest": "^6.2.2",

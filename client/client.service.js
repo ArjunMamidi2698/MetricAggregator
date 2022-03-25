@@ -6,8 +6,16 @@ const {
 	validateValue,
 	generateTransactionHash,
 } = require("../utils/serviceUtils");
-const { signMessage, findAccount, createAccounts } = require("../utils/web3Utils");
+const {
+	signMessage,
+	findAccount,
+	createAccounts,
+} = require("../utils/web3Utils");
 require("dotenv").config({ path: "../.env" }); // read properties from .env
+let chai = require("chai");
+let chaiHttp = require("chai-http");
+chai.use(chaiHttp);
+let server = null;
 
 /**
  * Will do a post request to server and pass transaction object as data.
@@ -27,19 +35,23 @@ const postTransactionToServer = async (txObj, tamper) => {
 			);
 			txObj.signature = txObj.signature.substring(2);
 		}
-		axios
-			.post(
-				`http://localhost:${process.env.SERVER_PORT}/sendMessage`,
-				txObj
-			)
-			.then(function serverResponse(res) {
-				if (res.status == 200) {
-					const { address, value } = txObj;
-					addLog(
-						`Sent value:"\x1b[33m${value}\x1b[0m" from AccountAddress: ${address} to server`
-					);
-				}
-			});
+		if (process.env.ENV_VAR == "integrationTest") {
+			await chai.request(server).post("/sendMessage").send(txObj);
+		} else {
+			axios
+				.post(
+					`http://localhost:${process.env.SERVER_PORT}/sendMessage`,
+					txObj
+				)
+				.then(function serverResponse(res) {
+					if (res.status == 200) {
+						const { address, value } = txObj;
+						addLog(
+							`Sent value:"\x1b[33m${value}\x1b[0m" from AccountAddress: ${address} to server`
+						);
+					}
+				});
+		}
 	} catch (error) {
 		console.error("something went wrong", err);
 	}
@@ -147,6 +159,11 @@ const initClientToServerMessagesPolling = () => {
 		process.env.MESSAGE_VALUE_RANGE_MAX || 10
 	);
 	console.log("Starting Polling...");
+	const pollingTimeout =
+		process.env.ENV_VAR == "integrationTest" ? 6000 : 60000;
+	if(process.env.ENV_VAR == "integrationTest") {
+		server = require("../server/server");
+	}
 	const interval = setInterval(() => {
 		const value = generateRandomValueInRange(minValue, maxValue);
 		addMessage(
@@ -158,13 +175,14 @@ const initClientToServerMessagesPolling = () => {
 	setTimeout(() => {
 		console.log("Stopping Polling...");
 		clearInterval(interval);
-	}, 60000); // stop polling after 1 minute
+	}, pollingTimeout); // stop polling after 1 minute or 6 seconds in test env
 };
 
 module.exports = {
 	postTransactionToServer,
 	generateTransactionObject,
 	addMessage,
-	getAccounts, initAccounts,
+	getAccounts,
+	initAccounts,
 	initClientToServerMessagesPolling,
 };

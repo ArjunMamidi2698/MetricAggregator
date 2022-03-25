@@ -44,6 +44,7 @@ If the installation was successful, you should be able to run the following comm
 -   Aggregrate value
 -   Remove value for invalid Transactions after configured stale timeout
 -   Fetch metrics from server through api
+-   Tests for aggregator, client & server services, utils, api testing, integration of client and server.
 
 ## Steps to run
 
@@ -108,7 +109,6 @@ $ npm run client:dev
 
 ```
 $ npm run test
-
 ```
 
 ## Api's exposed:

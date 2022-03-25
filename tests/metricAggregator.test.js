@@ -123,7 +123,6 @@ describe("Aggregrate Message", () => {
 				);
 				assert.equal(aggregateInstance.aggregatedValue, 0);
 			}, staleTimeout);
-			console.log();
 		});
 	});
 	describe("getters with filters", () => {

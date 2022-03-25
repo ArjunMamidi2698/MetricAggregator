@@ -1,6 +1,6 @@
 let chai = require("chai");
 let chaiHttp = require("chai-http");
-let clientServer = require("../../client/client");
+let clientsServer = require("../../client/client");
 const { findAccount } = require("../../utils/web3Utils");
 let should = chai.should();
 require("dotenv").config({ path: "../../.env" }); // read properties from .env
@@ -9,7 +9,7 @@ chai.use(chaiHttp);
 describe("Client GET Api", () => {
 	describe("GET api to fetch all Accounts details in wallet", () => {
 		it("Should fetch all configured length of accounts added into the wallet", async () => {
-			const res = await chai.request(clientServer).get("/getAccounts");
+			const res = await chai.request(clientsServer).get("/getAccounts");
 			res.should.have.status(200);
 			res.body.should.be.a("object");
 			res.body.should.have.property("accounts");
@@ -27,7 +27,7 @@ describe("Client POST Api", () => {
 			const value = 10;
 			const account = await findAccount(accountIndex);
 			const res = await chai
-				.request(clientServer)
+				.request(clientsServer)
 				.post("/addMessage")
 				.send({ accountKey: accountIndex, value: value });
 			res.should.have.status(200);
@@ -44,7 +44,7 @@ describe("Client POST Api", () => {
 			const value = 10;
 			const account = await findAccount(accountIndex);
 			const res = await chai
-				.request(clientServer)
+				.request(clientsServer)
 				.post("/addMessage")
 				.send({ accountKey: accountIndex, value: value, tamper: true });
 			res.should.have.status(200);
@@ -58,13 +58,13 @@ describe("Client POST Api", () => {
 		});
 		it("Should fail if value is not a valid positive number", async () => {
 			const res = await chai
-				.request(clientServer)
+				.request(clientsServer)
 				.post("/addMessage")
 				.send({ accountKey: 0, value: -1 });
 			res.should.have.status(201);
 			res.body.should.have.property("error");
 			const res2 = await chai
-				.request(clientServer)
+				.request(clientsServer)
 				.post("/addMessage")
 				.send({ accountKey: 0, value: "!234$" });
 			res2.should.have.status(201);
@@ -72,13 +72,13 @@ describe("Client POST Api", () => {
 		});
 		it("Should fail if account not found", async () => {
 			const res = await chai
-				.request(clientServer)
+				.request(clientsServer)
 				.post("/addMessage")
 				.send({ accountKey: 120, value: 10 });
 			res.should.have.status(201);
 			res.body.should.have.property("error");
 			const res2 = await chai
-				.request(clientServer)
+				.request(clientsServer)
 				.post("/addMessage")
 				.send({
 					accountKey:

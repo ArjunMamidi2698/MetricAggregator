@@ -44,11 +44,7 @@ function handleJSONResponse(res, data) {
 // send Message from clients
 app.post("/sendMessage", (req, res) => {
 	const msgRes = aggregateMessage(req.body);
-	if (msgRes.hasOwnProperty("error")) {
-		handleJSONResponse(res, msgRes);
-	} else {
-		handleJSONResponse(res, { message: "data Received" });
-	}
+	handleJSONResponse(res, msgRes);
 });
 
 // get AggregratedValue with optional filter(success or fail)

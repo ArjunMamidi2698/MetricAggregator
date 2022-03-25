@@ -10,7 +10,7 @@ const SHA256 = require("crypto-js/sha256");
  *
  **/
 function addLog(data, functionName) {
-	if (!process.env.ENV_VAR || process.env.ENV_VAR != "test") {
+	if (!process.env.ENV_VAR || ( process.env.ENV_VAR != "test" && process.env.ENV_VAR != "integrationTest") ) {
 		const caller =
 			functionName == undefined ? addLog.caller?.name : functionName;
 		// logFormat: date timestamp - [callerName]: <data>

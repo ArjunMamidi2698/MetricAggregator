@@ -32,9 +32,10 @@ const getAggregratedValue = (filter) => {
  * @param {object} msgObj
  *
  **/
-const aggregateMessage = async (tx) => {
+const aggregateMessage = (tx) => {
 	try {
-		return await getMetricAggregateInstance().addMessage(tx);
+		getMetricAggregateInstance().addMessage(tx);
+		return { message: "data Received" };
 	} catch (error) {
 		return { error: error.message };
 	}

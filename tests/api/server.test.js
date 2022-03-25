@@ -74,7 +74,9 @@ describe("Server GET API's", () => {
 			res.body.aggregatedValue.should.have.property("aggregatedValue");
 			res.body.aggregatedValue.should.have.property("success");
 			res.body.aggregatedValue.should.have.property("fail");
-			res.body.aggregatedValue.should.have.property("aggregatedValue").eql(201); // will remove failed valie after stale timeout
+			res.body.aggregatedValue.should.have
+				.property("aggregatedValue")
+				.eql(201); // will remove failed valie after stale timeout
 			res.body.aggregatedValue.should.have.property("success").eql(100);
 			res.body.aggregatedValue.should.have.property("fail").eql(101);
 		});
