@@ -166,4 +166,4 @@ https://www.getpostman.com/collections/1a87bd76f15ded3910b6
 
 ## Demo Video
 
-Watch Demo video here => /metricAggregator/metricAggregator.mp4
+Watch Demo video here => https://github.com/ArjunMamidi2698/metricAggregator/blob/main/MetricAggregator.mp4
